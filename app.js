@@ -3,6 +3,7 @@ const methodOverride = require('method-override');
 const path = require('path');
 const mongoose = require('mongoose');
 const Room = require('./model/schema');
+const ejsMate = require('ejs-mate')
 
 const app = express();
 const port = 8080;
@@ -13,6 +14,8 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
+
+app.engine('ejs', ejsMate);
 
 //server
 main().then(result=>{
@@ -81,8 +84,7 @@ app.put('/listings/:id', async(req,res)=>{
 
 app.delete('/listings/:id', async(req,res)=>{
     const {id} = req.params;
-    const room = req.body;
-    console.log(room)
+    const room = await Room.findByIdAndDelete(id);
     res.redirect('/listings');
 });
 

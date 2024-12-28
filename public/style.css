@@ -1,21 +1,3 @@
-.room-box{
-    height: 300px;
-    margin-bottom:100px;
+.container .company-title{
+    color: red;
 }
-
-.room-box a{
-    text-decoration: none;
-    color:#000;
-}
-
-.room-img {
-    width: 100%;
-    height: 100%;
-    border-radius: 4px;
-
-}
-
-/* items Details css */
-
-
-
