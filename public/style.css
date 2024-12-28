@@ -1,3 +1,122 @@
-.container .company-title{
-    color: red;
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+body{
+    font-family: "Plus Jakarta Sans", serif;
+}
+.fa-compass{
+    color: #fe424d;
+    font-size: 2rem;
+    margin-right:1rem;
+}
+
+.navbar{
+    height: 5rem;
+    background-color: white;
+}
+
+.nav-link{
+    color: #222222;
+}
+
+/* Footer */
+
+.footer{
+    border-top: 1px solid rgb(201, 199, 199);
+    margin-top:4rem ;
+    padding: 4rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: .8rem;
+    font-weight: 600;
+    background-attachment: #ebebebeb;
+
+}
+
+.lang-icon{
+    display: flex;
+    gap: 30px;
+}
+
+.icons{
+    display: flex;
+    gap: 15px;
+    font-size: 1.3rem;
+}
+
+.lang-curr{
+    display: flex;
+    gap: 7px;
+    align-items: center;
+}
+
+.fa-globe{
+    font-size:1.3rem;
+}
+
+.privacy-links{
+    display: flex;
+    gap: 10px;
+}
+
+.privacy-links a{
+    text-decoration: none;
+    color: #222222;
+
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+/* Edit.ejs */
+
+.text-area{
+    resize: none;
+}
+
+/* ItemDetails.ejs */
+.items-details{
+    height: 300px;
+}
+
+.items-details img{
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    margin: 15px 0px;
+}
+
+.items-btn button{
+    width: 100px;
+}
+
+.items-btn{
+    margin-top:1rem;
+    margin-bottom: 18rem;
+}
+
+/* Listings */
+.room-box{
+    height: 200px;
+}
+
+.room-box a{
+    text-decoration: none;
+    color: #000;
+}
+
+.room-box img{
+        height: 100%;
+        width: 100%;
+        border-radius: 4px;
+}
+
+@media (max-width:575px) {
+        .room-box{
+        margin: 0 auto;
+        width: 400px;
+        height: 350px;
+    }
+
 }
