@@ -3,7 +3,9 @@ const methodOverride = require('method-override');
 const path = require('path');
 const mongoose = require('mongoose');
 const Room = require('./model/schema');
-const ejsMate = require('ejs-mate')
+const ejsMate = require('ejs-mate');
+const ExpressError = require('./ExpressError/ExpressError');
+const wrapAsync = require('./utils/util')
 
 const app = express();
 const port = 8080;
@@ -12,7 +14,9 @@ app.set('views', path.join(__dirname,'view'));
 app.set('view engine', 'ejs');
 
 app.use(express.urlencoded({extended:true}));
-app.use(express.static('public'));
+app.use(express.static('public/css'));
+app.use(express.static('public/js'));
+
 app.use(methodOverride('_method'));
 
 app.engine('ejs', ejsMate);
@@ -42,51 +46,103 @@ async function main() {
 //   });
 //server
 
-app.get('/', async(req, res)=>{
+
+
+
+
+app.get('/', wrapAsync( async(req, res,next)=>{
     const rooms = await Room.find();
     res.render('Root.ejs', {rooms});
-});
+}));
 
-app.get('/listings', async(req,res)=>{
+app.get('/listings',wrapAsync( async(req,res,next)=>{
     const rooms = await Room.find();
     res.render('Listings.ejs', {rooms});
-});
+}));
 
-app.get('/listings/new',(req,res)=>{
+app.get('/listings/new',wrapAsync((req,res,next)=>{
     res.render('new.ejs');
-});
+}));
 
-app.get('/listings/:id', async(req,res)=>{
+app.get('/listings/:id',wrapAsync( async(req,res,next)=>{
     const {id} = req.params;
     const room = await Room.findById(id);
+    if(!room){
+        return next(new ExpressError(402, "Invalid Id"))
+    }
     res.render("itemsDetails.ejs",{room});
-});
+}));
 
-app.post('/listings', async(req,res)=>{
-    const{listing} = req.body
-    const room = await new Room(listing).save();
+app.post('/listings',wrapAsync( async(req,res,next)=>{
+    const{listing} = req.body;
+    if(!listing){
+        next(new ExpressError(404, 'Please enter valid data'))
+    };
+    const room =  new Room(listing);
+    
+    if(!room.title){
+        next(new ExpressError(404, 'Title is missing!'))
+    }else if(!room.description){
+        next(new ExpressError(404, 'Description is missing!'))
+    }else if(!room.location){
+        next(new ExpressError(404, 'Location is missing!'))
+    }else if(!room.country){
+        next(new ExpressError(404, 'Country is missing!'))
+    }
+    await room.save()
     res.redirect('/listings');
-});
+}));
 
 //Edit rout
-app.get('/listings/:id/edit', async(req,res)=>{
+app.get('/listings/:id/edit', wrapAsync(async(req,res,next)=>{
     const {id} = req.params;
     const room = await Room.findById(id);
     res.render('edit.ejs', {room});
-});
-app.put('/listings/:id', async(req,res)=>{
+}));
+
+app.put('/listings/:id',wrapAsync( async(req,res,next)=>{
     const {id} = req.params;
-    const{title, description, image, price, location, country} = req.body.listing;
-    const room = await Room.findByIdAndUpdate(id,{title:title, description:description, image:image, price:price, location:location, country:country});
-    res.redirect('/listings');
-});
+    const{listing} = req.body;
+    if(!listing){
+        next(new ExpressError(400, 'Please enter valid data'))
+    }
+    const room = await Room.findByIdAndUpdate(id,{...listing});
+    
+    res.redirect(`/listings/${id}`);
+}));
 
 
-app.delete('/listings/:id', async(req,res)=>{
+app.delete('/listings/:id',wrapAsync( async(req,res,next)=>{
     const {id} = req.params;
     const room = await Room.findByIdAndDelete(id);
     res.redirect('/listings');
+}));
+
+app.all('*', (req, res, next) =>{
+    next(new ExpressError(404, 'Page not found!'))
 });
+
+// const handlingErrByName = (err, req, res) => {
+//     if(err.name === 'CastError'){
+//         const {name, status = 400, message = 'Something went wrong!'} = err;
+//         return res.send('error.ejs', {name, status, message})
+//     }
+
+//     next(err)
+// }
+
+// app.use((err, req, res, next) => {
+//     const {status = 400, message = 'Error Occured!'} = err
+//     handlingErrByName(err, req, res)
+//     next(err);
+// });
+
+//Error Handling Middleware
+app.use((err, req, res, next) => {
+    const {name, status = 400, message = 'Something went wrong!'} = err;
+    res.status(status).render('error.ejs',{name, status, message});
+// res.send('something went wrong')
+})
 
 app.listen(port, (req, res)=>{
     console.log(`server listening on port ${port}`)

@@ -8,12 +8,12 @@ const RentYRoomSchema = new Schema({
     }, 
     description:{
         type:String,
-        required:true
+        maxLength:100
     }, 
     image:{
         type:String,
         default:"https://images.pexels.com/photos/6776756/pexels-photo-6776756.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-        set:(v)=>v===" " ? "https://images.pexels.com/photos/6776756/pexels-photo-6776756.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" : v
+        set:(v)=>v==="" ? "https://images.pexels.com/photos/6776756/pexels-photo-6776756.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" : v
     },
     price:{
         type:Number,

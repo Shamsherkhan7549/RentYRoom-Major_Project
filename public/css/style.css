@@ -99,6 +99,10 @@ body{
 /* Listings */
 .room-box{
     height: 200px;
+    opacity: 1;
+    &:hover{
+        opacity: .8;
+    }
 }
 
 .room-box a{
@@ -119,4 +123,30 @@ body{
         height: 350px;
     }
 
+}
+
+/* error.ejs */
+
+.error{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(104, 104, 104);
+    gap: 10px;
+    text-align: center;
+}
+
+.error h1{
+    font-size: 1rem;
+}
+
+.error svg{
+    height: 2rem;
+    width: 2rem;
+    padding-left: 10px;
+}
+
+.error-row{
+    margin-top: 5rem;
+    
 }
