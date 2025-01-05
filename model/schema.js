@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
+const {REVIEW} = require('./reviewSchema')
 
 const RentYRoomSchema = new Schema({
     title:{
@@ -8,7 +9,7 @@ const RentYRoomSchema = new Schema({
     }, 
     description:{
         type:String,
-        maxLength:100
+        maxLength:1000
     }, 
     image:{
         type:String,
@@ -26,7 +27,15 @@ const RentYRoomSchema = new Schema({
     country:{
         type:String,
         required:true
-    }
+    },
+    
+    reviews:[
+        {
+            type:Schema.Types.ObjectId,
+            ref:REVIEW
+        }
+    ]
+
 
 });
 

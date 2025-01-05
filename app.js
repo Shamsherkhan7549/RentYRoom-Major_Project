@@ -6,7 +6,8 @@ const Room = require('./model/schema');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./ExpressError/ExpressError');
 const wrapAsync = require('./utils/util');
-const {joiSchema} = require('./joiSchema.js')
+const {joiSchema} = require('./joiSchema.js');
+const {REVIEW} = require('./model/reviewSchema.js')
 
 const app = express();
 const port = 8080;
@@ -51,12 +52,13 @@ app.get('/listings/new',wrapAsync((req,res,next)=>{
 
 app.get('/listings/:id',wrapAsync( async(req,res,next)=>{
     const {id} = req.params;
-    const room = await Room.findById(id);
+    const room = await Room.findById(id).populate('reviews');
     if(!room){
         return next(new ExpressError(402, "Invalid Id"))
     }
     res.render("itemsDetails.ejs",{room});
 }));
+
 
 app.post('/listings',wrapAsync( async(req,res,next)=>{
     const{listing} = req.body;
@@ -101,16 +103,39 @@ app.delete('/listings/:id',wrapAsync( async(req,res,next)=>{
     res.redirect('/listings');
 }));
 
+// review
+app.post('/listings/:id/review',wrapAsync( async(req, res, next) => {
+    const review = req.body;
+    const {id} = req.params
+
+    const result = new REVIEW(review);
+    const result2 = await Room.findById(id);
+    const result3 = result2.reviews.push(result);
+    await result.save();
+    const reviewSavedRooms = await result2.save();
+    res.redirect(`/listings/${id}`)
+}));
+
+// delete review
+app.delete('/listings/:id/review/:id2',wrapAsync( async(req, res)=> {
+    const{id, id2} = req.params;
+    const deletedReview = await REVIEW.findByIdAndDelete(id2);
+    const room = await Room.findById(id);
+    room.reviews = room.reviews.filter(review=>review._id !== id2)
+    const savedRoom = await room.save();
+    res.redirect(`/listings/${id}`);
+}))
+
+
+
 app.all('*', (req, res, next) =>{
     next(new ExpressError(404, 'Page not found!'))
 });
-
 
 //Error Handling Middleware
 app.use((err, req, res, next) => {
     const {name, status = 400, message = 'Something went wrong!'} = err;
     res.status(status).render('error.ejs',{name, status, message});
-// res.send('something went wrong')
 })
 
 app.listen(port, (req, res)=>{

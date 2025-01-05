@@ -150,3 +150,57 @@ body{
     margin-top: 5rem;
     
 }
+
+/* review css */
+
+
+.review-container {
+    width:100% ;
+    /* background-color: red; */
+}
+
+.review-container form{
+    width: 100%;
+
+    
+}
+.comments{
+    height: 150px;
+    overflow-y: hidden;
+    font-size: 13px;
+}
+
+.comments button{
+    font-size: 10px;
+}
+
+.delete-review{
+    width: 90px !important;
+    text-align: right;
+}
+
+.review-container textarea{
+    resize: none;
+}
+
+.comments::-webkit-scrollbar {
+     /* Hides scrollbar */
+     width: 1px;
+     color: red;
+ }
+
+/* Customize the width of the scrollbar */
+ .comments::-webkit-scrollbar {
+  width: 2px; /* Scrollbar width */
+}
+
+/* Customize the track (background) */
+.row .comments::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light grey background */
+}
+
+/* Customize the scrollbar thumb (handle) */
+.row .comments::-webkit-scrollbar-thumb {
+  background: #d8d7d7d3; /* Darker grey for the handle */
+  border-radius: 4px; /* Rounded corners */
+} 
