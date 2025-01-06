@@ -39,6 +39,13 @@ const RentYRoomSchema = new Schema({
 
 });
 
+// mongoose middleware
+RentYRoomSchema.post('findOneAndDelete',async(data)=>{
+    const deletedReview =  await REVIEW.deleteMany({_id:{$in:data.reviews}});
+    console.log(deletedReview);
+    return
+})
+
 const Room = mongoose.model('Room', RentYRoomSchema);
 
 module.exports = Room;

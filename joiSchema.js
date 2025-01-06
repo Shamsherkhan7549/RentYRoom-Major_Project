@@ -14,6 +14,11 @@ const joiSchema = Joi.object({
             .required(),
     country: Joi.string()
             .required()
+}).required();
+
+const reveiwJoiSchema = Joi.object({
+        remarks:Joi.string().required(),
+        rating:Joi.number().required().min(1).max(5)
 })
 
-module.exports  = {joiSchema}
+module.exports  = {joiSchema, reveiwJoiSchema}

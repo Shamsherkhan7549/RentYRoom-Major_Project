@@ -31,8 +31,9 @@
         <div class="row col-12 col-sm-10 col-md-8 col-lg-6 py-5">
             <h6>All Comments</h6>
             <form action="http://localhost:8080/listings/<%=room._id %>/review"  method="POST">
-                <input  type="range" name="rating" min="1" max="5" value="5" required>
-                <textarea class="form-control" name="remarks" rows='2' cols="1" id="" required></textarea>
+                <label for="rating">Rating</label> <br>
+                <input  type="range" id="rating" name="review[rating]" min="1" max="5" value="5" required>
+                <textarea class="form-control" name="review[remarks]" rows='2' cols="1" id="" required></textarea>
                 <button type="submit" class="btn btn-outline-primary mt-2">Submit</button>
             </form>
     
@@ -42,7 +43,7 @@
                         <li class="d-flex justify-content-between align-items-center">
                             <p><%= review.remarks %>( <%= review.rating  %>) </p>
                             <form class="delete-review" action="http://localhost:8080/listings/<%=room._id %>/review/<%= review._id %>?_method=DELETE" method="POST">
-                                 <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                 <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                             </form>
                         </li>
                         

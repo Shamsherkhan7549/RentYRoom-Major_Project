@@ -6,7 +6,8 @@ const Room = require('./model/schema');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./ExpressError/ExpressError');
 const wrapAsync = require('./utils/util');
-const {joiSchema} = require('./joiSchema.js');
+const {joiSchema, reveiwJoiSchema} = require('./joiSchema.js');
+const Joi = require('joi');
 const {REVIEW} = require('./model/reviewSchema.js')
 
 const app = express();
@@ -59,28 +60,26 @@ app.get('/listings/:id',wrapAsync( async(req,res,next)=>{
     res.render("itemsDetails.ejs",{room});
 }));
 
-
+//data save route
 app.post('/listings',wrapAsync( async(req,res,next)=>{
     const{listing} = req.body;
-    const {error, value} =  joiSchema.validate(listing);  
-    console.log(error.details[0].message)
-
+    const {error} =  joiSchema.validate(listing); 
     if(error){
      return next( new ExpressError(404, error.details[0].message))
     }
-
     const room =  new Room(listing);
     await room.save()
     res.redirect('/listings');
 }));
 
-//Edit rout
+//Edit route
 app.get('/listings/:id/edit', wrapAsync(async(req,res,next)=>{
     const {id} = req.params;
     const room = await Room.findById(id);
     res.render('edit.ejs', {room});
 }));
 
+// edit route
 app.put('/listings/:id',wrapAsync( async(req,res,next)=>{
     const {id} = req.params;
     const{listing} = req.body;
@@ -96,18 +95,25 @@ app.put('/listings/:id',wrapAsync( async(req,res,next)=>{
     res.redirect(`/listings/${id}`);
 }));
 
-
+// delete rooms
 app.delete('/listings/:id',wrapAsync( async(req,res,next)=>{
     const {id} = req.params;
+    if(!id){
+        return next(new ExpressError(404, `item not found on this ${id}`))
+     };
     const room = await Room.findByIdAndDelete(id);
+    
     res.redirect('/listings');
 }));
 
 // review
-app.post('/listings/:id/review',wrapAsync( async(req, res, next) => {
-    const review = req.body;
-    const {id} = req.params
-
+app.post('/listings/:id/review',wrapAsync( async(req, res) => {
+    const {review} = req.body;
+    const {error} = reveiwJoiSchema.validate(review);
+    if(error){
+        return next(ExpressError(404, error.details[0].message))
+    }
+    const {id} = req.params;
     const result = new REVIEW(review);
     const result2 = await Room.findById(id);
     const result3 = result2.reviews.push(result);
@@ -117,12 +123,13 @@ app.post('/listings/:id/review',wrapAsync( async(req, res, next) => {
 }));
 
 // delete review
-app.delete('/listings/:id/review/:id2',wrapAsync( async(req, res)=> {
-    const{id, id2} = req.params;
-    const deletedReview = await REVIEW.findByIdAndDelete(id2);
-    const room = await Room.findById(id);
-    room.reviews = room.reviews.filter(review=>review._id !== id2)
-    const savedRoom = await room.save();
+app.delete('/listings/:id/review/:reviewId',wrapAsync( async(req, res)=> {
+    const{id, reviewId} = req.params;
+    const deletedReview = await REVIEW.findByIdAndDelete(reviewId);
+    const reviewListInRoom = await Room.findByIdAndUpdate(id,{$pull: {reviews: reviewId}});
+    // const room = await Room.findById(id);
+    // room.reviews = room.reviews.filter(review=>review._id === reviewId)
+    // const savedRoom = await room.save();
     res.redirect(`/listings/${id}`);
 }))
 
