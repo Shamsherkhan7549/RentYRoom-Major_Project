@@ -1,5 +1,4 @@
 const Joi = require('joi');
-
 const joiSchema = Joi.object({
     title: Joi.string()
             .required(),
@@ -16,9 +15,9 @@ const joiSchema = Joi.object({
             .required()
 }).required();
 
-const reveiwJoiSchema = Joi.object({
+const reviewJoiSchema = Joi.object({
         remarks:Joi.string().required(),
         rating:Joi.number().required().min(1).max(5)
 })
 
-module.exports  = {joiSchema, reveiwJoiSchema}
+module.exports  = {joiSchema, reviewJoiSchema}
