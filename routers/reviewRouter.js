@@ -24,6 +24,8 @@ router.post('/:id/review',validateReview,wrapAsync( async(req, res,next) => {
     const result3 = room.reviews.push(newReview);
     await newReview.save();
     const roomSavedReview = await room.save();
+    req.flash('success', 'New review Added');
+
     res.redirect(`/listings/${id}`)
 
 }));
@@ -36,6 +38,8 @@ router.delete('/:id/review/:reviewId',wrapAsync( async(req, res,next)=> {
     }
     const deletedReview = await REVIEW.findByIdAndDelete(reviewId);
     const reviewListInRoom = await Room.findByIdAndUpdate(id,{$pull: {reviews: reviewId}});
+    req.flash('success', 'Review deleted');
+
     // const room = await Room.findById(id);
     // room.reviews = room.reviews.filter(review=>review._id === reviewId)
     // const savedRoom = await room.save();

@@ -25,11 +25,13 @@ router.get('/new',wrapAsync((req,res,next)=>{
     res.render('new.ejs');
 }));
 
-router.get('/:id',wrapAsync( async(req,res,next)=>{
+router.get('/:id', wrapAsync( async(req,res,next)=>{
     const {id} = req.params;
     const room = await Room.findById(id).populate('reviews');
     if(!room){
-        return next(new ExpressError(402, "Invalid Id"))
+        req.flash('error', 'User not found on this id');
+        // return next(new ExpressError(402, "Invalid Id"))
+        res.redirect('/listings');
     }
     res.render("itemsDetails.ejs",{room});
 }));
@@ -38,7 +40,8 @@ router.get('/:id',wrapAsync( async(req,res,next)=>{
 router.post('/', validateRooms, wrapAsync( async(req,res,next)=>{
     const{listing} = req.body;
     const room =  new Room(listing);
-    await room.save()
+    await room.save();
+    req.flash('success', 'New Room Added');
     res.redirect('/listings');
 }));
 
@@ -46,14 +49,21 @@ router.post('/', validateRooms, wrapAsync( async(req,res,next)=>{
 router.get('/:id/edit', wrapAsync(async(req,res,next)=>{
     const {id} = req.params;
     const room = await Room.findById(id);
+    if(!room){
+        req.flash('error', 'User not found on this id');
+        // return next(new ExpressError(402, "Invalid Id"))
+        res.redirect('/listings');
+    }
     res.render('edit.ejs', {room});
 }));
 
 // edit route
-router.put('/:id',validateRooms, wrapAsync( async(req,res,next)=>{
+router.put('/:id', validateRooms, wrapAsync(async(req,res,next)=>{
     const {id} = req.params;
     const{listing} = req.body;
     const room = await Room.findByIdAndUpdate(id,{...listing});
+    req.flash('success', 'Room updated');
+
     res.redirect(`/listings/${id}`);
 }));
 
@@ -64,7 +74,7 @@ router.delete('/:id',wrapAsync( async(req,res,next)=>{
         return next(new ExpressError(404, `item not found on this ${id}`))
      };
     const room = await Room.findByIdAndDelete(id);
-    
+    req.flash('success', 'One room deleted');
     res.redirect('/listings');
 }));
 
