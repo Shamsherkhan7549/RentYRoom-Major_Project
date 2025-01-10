@@ -8,6 +8,10 @@ const session = require('express-session');
 const flash = require('connect-flash')
 const reviewRouter = require('./routers/reviewRouter');
 const roomRouter = require('./routers/roomRouter');
+const userRouter = require('./routers/userRouter')
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const USER = require('./model/userSchema');
 
 
 
@@ -35,6 +39,12 @@ app.use(methodOverride('_method'));
 app.use(session(sessionOption));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(USER.authenticate()))
+passport.serializeUser(USER.serializeUser());
+passport.deserializeUser(USER.deserializeUser());
+
 app.use((req, res, next)=>{
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
@@ -59,8 +69,19 @@ app.get('/', ((req, res)=>{
     res.send('HI , I AM ROOT ROUTE OF RentYRoom')
 }));
 
+app.get('/demo', async(req, res)=>{
+    let fakeuser = new USER({
+        email:'abc@gmail123.com',
+        username:'Shamsher76',
+    });
+
+    let registeredUser = await USER.register(fakeuser, 'hello');
+    res.send(registeredUser)
+});
+
 app.use('/listings', roomRouter);
 app.use('/listings', reviewRouter);
+app.use('/', userRouter);
 
 app.all('*', (req, res, next) =>{
     next(new ExpressError(404, 'Page not found!'))
