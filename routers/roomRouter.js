@@ -5,6 +5,8 @@ const wrapAsync = require('../utils/util');
 const ExpressError = require('../ExpressError/ExpressError');
 const {joiSchema} = require('../joiSchema');
 const Joi = require('joi');
+const passport = require('passport');
+const {isLoggedIn} = require('../middleware/authenticateUser');
 
 
 //joi error handling 
@@ -21,8 +23,8 @@ router.get('/',wrapAsync( async(req,res,next)=>{
     res.render('Listings.ejs', {rooms});
 }));
 
-router.get('/new',wrapAsync((req,res,next)=>{
-    res.render('new.ejs');
+router.get('/new', isLoggedIn, wrapAsync((req,res,next)=>{
+        res.render('new.ejs');
 }));
 
 router.get('/:id', wrapAsync( async(req,res,next)=>{
@@ -37,7 +39,7 @@ router.get('/:id', wrapAsync( async(req,res,next)=>{
 }));
 
 //data save route
-router.post('/', validateRooms, wrapAsync( async(req,res,next)=>{
+router.post('/', validateRooms,isLoggedIn, wrapAsync( async(req,res,next)=>{
     const{listing} = req.body;
     const room =  new Room(listing);
     await room.save();
@@ -46,7 +48,7 @@ router.post('/', validateRooms, wrapAsync( async(req,res,next)=>{
 }));
 
 //Edit route
-router.get('/:id/edit', wrapAsync(async(req,res,next)=>{
+router.get('/:id/edit', isLoggedIn, wrapAsync(async(req,res,next)=>{
     const {id} = req.params;
     const room = await Room.findById(id);
     if(!room){
@@ -58,7 +60,7 @@ router.get('/:id/edit', wrapAsync(async(req,res,next)=>{
 }));
 
 // edit route
-router.put('/:id', validateRooms, wrapAsync(async(req,res,next)=>{
+router.put('/:id', validateRooms,isLoggedIn, wrapAsync(async(req,res,next)=>{
     const {id} = req.params;
     const{listing} = req.body;
     const room = await Room.findByIdAndUpdate(id,{...listing});
@@ -68,7 +70,7 @@ router.put('/:id', validateRooms, wrapAsync(async(req,res,next)=>{
 }));
 
 // delete rooms
-router.delete('/:id',wrapAsync( async(req,res,next)=>{
+router.delete('/:id',isLoggedIn,wrapAsync( async(req,res,next)=>{
     const {id} = req.params;
     if(!id){
         return next(new ExpressError(404, `item not found on this ${id}`))

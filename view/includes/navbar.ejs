@@ -6,16 +6,25 @@
                          <span class="navbar-toggler-icon"></span>
                        </button>
                        
-                       <div class="collapse navbar-collapse" id="navbarNav">
-                         <ul class="navbar-nav">
-                            <a class="nav-link " aria-current="page" href="/">Home</a>
+                       <div class="collapse navbar-collapse navbar" id="navbarNavAltMarkup">
+                         <div class="navbar-nav">
+                            <a class="nav-link " aria-current="page" href="/listings">Home</a>
                             <a class="nav-link " href="/listings">All Rooms</a>
-                            <a class="nav-link " href="/listings/new">Create New Rooms</a>
+                            <a class="nav-link " href="/listings/new">Create New Rooms</a>  
+                          </div>
+
+                          <div class="navbar-nav">
+                            <% if(!currUser){ %>
                             <a class="nav-link " href="/user/signup">SignUp</a>
                             <a class="nav-link " href="/user/login">Login</a>
+                            <% } %>
 
-
-                         </ul>
+                            <% if(currUser){ %>
+                            <a class="nav-link " href="/logout">Logout</a>
+                            <% } %>
+                          </div>
                        </div>
+
+                       
                      </div>
                     </nav>
