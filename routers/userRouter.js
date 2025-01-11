@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const wrapAsync = require('../utils/util');
-const ExpressError = require('../ExpressError/ExpressError');
-const Joi = require('joi');
 const USER = require('../model/userSchema');
 const passport = require('passport');
 
@@ -10,10 +8,10 @@ router.get('/user/signup', (req, res)=>{
     res.render('signUp.ejs')
 });
 
-router.post('/signup', wrapAsync(async(req, res)=>{
+router.post('/user', wrapAsync(async(req, res)=>{
    try{
-    const {username, email, password} = req.body.user;
-
+    const {username, email, password} = req.body;
+    console.log(req.body)
     const user = new USER({username, email})
 
     let userRegitered = await USER.register(user, password);
@@ -29,14 +27,14 @@ router.post('/signup', wrapAsync(async(req, res)=>{
 
 //login route
 
-router.get('/user/login', async(req, res)=>{
+router.get('/user/login', (req, res)=>{
     res.render('login.ejs')
 })
 
-router.post('/login', 
-    passport.authenticate('local', { failureRedirect: '/login', failureFlash:true }),
-    function(req, res) {
+router.post('/login',
+    passport.authenticate('local', { failureRedirect: '/user/login', failureFlash:true }),
+    async(req, res) => {
       res.redirect('/listings');
-    });
+});
 
 module.exports = router
