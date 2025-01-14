@@ -6,16 +6,10 @@ const ExpressError = require('../ExpressError/ExpressError');
 const {joiSchema} = require('../joiSchema');
 const Joi = require('joi');
 const passport = require('passport');
-const {isLoggedIn} = require('../middleware/authenticateUser');
+const {isLoggedIn, isOwner, validateRooms} = require('../middleware/authenticateUser');
 
 
-//joi error handling 
-const validateRooms = (err, req, res, next) => {
-    const {error} =  joiSchema.validate(req.body); 
-    if(error){
-     return next( new ExpressError(404, error.details[0].message))
-    }
-}
+
 
 
 router.get('/',wrapAsync( async(req,res,next)=>{
@@ -28,8 +22,13 @@ router.get('/new', isLoggedIn, wrapAsync((req,res,next)=>{
 }));
 
 router.get('/:id', wrapAsync( async(req,res,next)=>{
+    
     const {id} = req.params;
-    const room = await Room.findById(id).populate('reviews');
+    const room = await Room.findById(id)
+    .populate({path:'reviews', 
+        populate:{path:'author'}
+    })
+    .populate('owner');
     if(!room){
         req.flash('error', 'User not found on this id');
         // return next(new ExpressError(402, "Invalid Id"))
@@ -41,6 +40,7 @@ router.get('/:id', wrapAsync( async(req,res,next)=>{
 //data save route
 router.post('/', validateRooms,isLoggedIn, wrapAsync( async(req,res,next)=>{
     const{listing} = req.body;
+    listing.owner = req.user._id
     const room =  new Room(listing);
     await room.save();
     req.flash('success', 'New Room Added');
@@ -60,12 +60,11 @@ router.get('/:id/edit', isLoggedIn, wrapAsync(async(req,res,next)=>{
 }));
 
 // edit route
-router.put('/:id', validateRooms,isLoggedIn, wrapAsync(async(req,res,next)=>{
+router.put('/:id',isLoggedIn, validateRooms,isOwner, wrapAsync(async(req,res,next)=>{
     const {id} = req.params;
     const{listing} = req.body;
     const room = await Room.findByIdAndUpdate(id,{...listing});
     req.flash('success', 'Room updated');
-
     res.redirect(`/listings/${id}`);
 }));
 

@@ -121,7 +121,7 @@ body{
         margin: 0 auto;
         width: 400px;
         height: 350px;
-    }
+    };
 
 }
 
@@ -164,6 +164,15 @@ body{
 
     
 }
+
+.review-list{
+    list-style: none;
+    width: 200px;
+    height:140px;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid black;
+}
 .comments{
     height: 150px;
     overflow-y: hidden;
@@ -176,7 +185,7 @@ body{
 
 .delete-review{
     width: 90px !important;
-    text-align: right;
+    text-align: left;
 }
 
 .review-container textarea{

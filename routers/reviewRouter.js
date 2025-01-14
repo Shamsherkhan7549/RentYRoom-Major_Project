@@ -6,19 +6,12 @@ const wrapAsync = require('../utils/util');
 const ExpressError = require('../ExpressError/ExpressError');
 const Room = require('../model/schema.js');
 const Joi = require('joi');
-
-const validateReview = (err,req,res, next) => {
-    const {error} = reviewJoiSchema.validate(req.body);
-    if(error){
-        return next(new ExpressError(404, error.details[0].message))
-    }
-    return next()
-}
-
+const {validateReview,isLoggedIn, isAuthor} = require('../middleware/authenticateUser.js')
 // review
-router.post('/:id/review',validateReview,wrapAsync( async(req, res,next) => {
+router.post('/:id',isLoggedIn, validateReview,wrapAsync( async(req, res,next) => {
     const {review} = req.body; 
     const {id} = req.params;
+    review.author = req.user._id
     const newReview = new REVIEW(review);
     const room = await Room.findById(id);
     const result3 = room.reviews.push(newReview);
@@ -31,18 +24,12 @@ router.post('/:id/review',validateReview,wrapAsync( async(req, res,next) => {
 }));
 
 // delete review
-router.delete('/:id/review/:reviewId',wrapAsync( async(req, res,next)=> {
+router.delete('/:id/review/:reviewId',isLoggedIn,isAuthor,wrapAsync( async(req, res,next)=> {
     const{id, reviewId} = req.params;
-    if(!id || !reviewId){
-        return next(ExpressError(404, `item not found at this ${id||reviewId}`))
-    }
-    const deletedReview = await REVIEW.findByIdAndDelete(reviewId);
+    
+    await REVIEW.findByIdAndDelete(reviewId);
     const reviewListInRoom = await Room.findByIdAndUpdate(id,{$pull: {reviews: reviewId}});
     req.flash('success', 'Review deleted');
-
-    // const room = await Room.findById(id);
-    // room.reviews = room.reviews.filter(review=>review._id === reviewId)
-    // const savedRoom = await room.save();
     res.redirect(`/listings/${id}`);
 }));
 

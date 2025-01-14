@@ -1,36 +1,42 @@
 <% layout('/layouts/boilerplate') -%>
 <body>
-    <div class="container items-btn text-muted">
+    <div class="container items-btn text-muted py-5 ">
         <div class="row">
             <div class=" col-12 col-sm-10 col-md-8 col-lg-6 items-details">
                 <h2 class="card-title"><%= room.title %></h2>
                 <img src="<%= room.image %>" class="card-img-top" alt="...">
                 <div class="card-body">
+                    <p>Owned by_ <i><b><%= room.owner.username %></b></i></p>
                     <p class="card-text "><%= room.description %></p>
                     <p class="card-text "><%= room.location %>, <%= room.country %></p>
                     <p class="card-text">&#8377;<%= room.price.toLocaleString("en-IN") %>/night</p>
                 </div>
-                <div class="container  my-2 ">
-                    <div class="row">
-                        <form action="http://localhost:8080/listings/<%=room._id%>/edit"  method="GET" class=" col-3 form-edit">
-                            <button  type="submit" class="btn btn-primary">Edit</button>
-                        </form>
-                        <div class="col-6"></div>
-                        <form action="http://localhost:8080/listings/<%= room._id%>?_method=DELETE" method="POST" class=" col-3">
-                            <button  type="submit" class="btn btn-danger">Delete</button>
-                        </form>
+
+                <% if(currUser && (currUser._id.equals(room.owner._id)) ){ %>
+
+                    <div class="container  my-3 ">
+                        <div class="row ">
+                                <form action="http://localhost:8080/listings/<%=room._id%>/edit"  method="GET" class=" col-3 form-edit">
+                                    <button  type="submit" class="btn btn-primary">Edit</button>
+                                </form>
+                                <div class="col-6"></div>
+                                <form action="http://localhost:8080/listings/<%= room._id%>?_method=DELETE" method="POST" class=" col-3">
+                                    <button  type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                        </div>
+                    
                     </div>
-                </div>
+                <% } %>
             </div>
         </div>
-    </div> 
-    <hr>          
+    </div>   
+    <hr>
 
-    <div class="container review-container ">
+    <div class="container review-container">
         <!-- comment form -->
         <div class="row col-12 col-sm-10 col-md-8 col-lg-6 py-5">
             <h6>All Comments</h6>
-            <form action="http://localhost:8080/listings/<%=room._id %>/review"  method="POST">
+            <form action="http://localhost:8080/listings/<%=room._id %>"  method="POST">
                 <label for="rating">Rating</label> <br>
                 <input  type="range" id="rating" name="review[rating]" min="1" max="5" value="5" required>
                 <textarea class="form-control" name="review[remarks]" rows='2' cols="1" id="" required></textarea>
@@ -40,11 +46,18 @@
             <% if(room.reviews && room.reviews.length>0){ %>
                 <ul class="comments px-5 py-3 overflow-y-scroll scroll-smooth">
                     <% for(review of room.reviews){%>
-                        <li class="d-flex justify-content-between align-items-center">
-                            <p><%= review.remarks %>( <%= review.rating  %>) </p>
+                        <li class="review-list">
+                           <div>
+                            <h5>@<%= review.author.username%></h5>
+                            <p><%= review.remarks %></p>
+                            <p><%= review.rating  %>stars</p>
+                           </div>
+                        
+                           <%if(currUser._id.equals(review.author._id)){ %>
                             <form class="delete-review" action="http://localhost:8080/listings/<%=room._id %>/review/<%= review._id %>?_method=DELETE" method="POST">
                                  <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                             </form>
+                            <% } %>
                         </li>
                         
                     <% } %>

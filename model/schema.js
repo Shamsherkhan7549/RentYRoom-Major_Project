@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const {Schema} = mongoose;
-const {REVIEW} = require('./reviewSchema')
+const {REVIEW} = require('./reviewSchema');
+const USER = require('./userSchema')
 
 const RentYRoomSchema = new Schema({
     title:{
@@ -34,7 +35,12 @@ const RentYRoomSchema = new Schema({
             type:Schema.Types.ObjectId,
             ref:REVIEW
         }
-    ]
+    ],
+
+    owner:{
+        type:Schema.Types.ObjectId,
+        ref:USER
+    }
 
 
 });
