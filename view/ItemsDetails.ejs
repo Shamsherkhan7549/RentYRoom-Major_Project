@@ -13,14 +13,13 @@
                 </div>
 
                 <% if(currUser && (currUser._id.equals(room.owner._id)) ){ %>
-
                     <div class="container  my-3 ">
                         <div class="row ">
-                                <form action="http://localhost:8080/listings/<%=room._id%>/edit"  method="GET" class=" col-3 form-edit">
+                                <form action="/listings/<%=room._id%>/edit"  method="GET" class=" col-3 form-edit">
                                     <button  type="submit" class="btn btn-primary">Edit</button>
                                 </form>
                                 <div class="col-6"></div>
-                                <form action="http://localhost:8080/listings/<%= room._id%>?_method=DELETE" method="POST" class=" col-3">
+                                <form action="/listings/<%= room._id%>?_method=DELETE" method="POST" class=" col-3">
                                     <button  type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                         </div>
@@ -36,28 +35,29 @@
         <!-- comment form -->
         <div class="row col-12 col-sm-10 col-md-8 col-lg-6 py-5">
             <h6>All Comments</h6>
-            <form action="http://localhost:8080/listings/<%=room._id %>"  method="POST">
+            <form action="/listings/<%=room._id %>"  method="POST">
                 <label for="rating">Rating</label> <br>
                 <input  type="range" id="rating" name="review[rating]" min="1" max="5" value="5" required>
                 <textarea class="form-control" name="review[remarks]" rows='2' cols="1" id="" required></textarea>
-                <button type="submit" class="btn btn-outline-primary mt-2">Submit</button>
+                <button type="submit" class="btn btn-outline-primary mt-2 mb-4">Submit</button>
             </form>
     
             <% if(room.reviews && room.reviews.length>0){ %>
-                <ul class="comments px-5 py-3 overflow-y-scroll scroll-smooth">
+                <ul class="comments  py-3 overflow-y-scroll scroll-smooth">
                     <% for(review of room.reviews){%>
                         <li class="review-list">
                            <div>
-                            <h5>@<%= review.author.username%></h5>
+                            <h6>@<%= review.author.username%></h6>
                             <p><%= review.remarks %></p>
                             <p><%= review.rating  %>stars</p>
                            </div>
                         
-                           <%if(currUser._id.equals(review.author._id)){ %>
-                            <form class="delete-review" action="http://localhost:8080/listings/<%=room._id %>/review/<%= review._id %>?_method=DELETE" method="POST">
-                                 <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            <form class="delete-review" action="/listings/<%=room._id %>/review/<%= review._id %>?_method=DELETE" method="POST">
+                                 <%if(currUser && currUser._id.equals(review.author._id)){ %>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                  <% } %>
                             </form>
-                            <% } %>
+                           
                         </li>
                         
                     <% } %>
