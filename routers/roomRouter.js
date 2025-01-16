@@ -8,12 +8,14 @@ const Joi = require('joi');
 const passport = require('passport');
 const {isLoggedIn, isOwner, validateRooms} = require('../middleware/authenticateUser');
 const room = require('../controller/room');
-
+const multer  = require('multer');
+const {storage} = require('../cloud.config.js')
+const upload = multer({ storage})
 
 
 router.route('/')
 .get(wrapAsync(room.index))
-.post(validateRooms,isLoggedIn, wrapAsync(room.addRoom));
+.post(validateRooms,isLoggedIn,upload.single('listing[image]'), wrapAsync(room.addRoom));
 
 router.get('/new', isLoggedIn, wrapAsync(room.newRoom));
 

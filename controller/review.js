@@ -11,7 +11,6 @@ module.exports.addReview = async(req, res,next) => {
     await newReview.save();
     const roomSavedReview = await room.save();
     req.flash('success', 'New review Added');
-
     res.redirect(`/listings/${id}`)
 
 };

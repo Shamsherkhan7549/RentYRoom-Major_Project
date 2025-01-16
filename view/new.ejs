@@ -3,7 +3,7 @@
 <div class="container my-3">
     <div class="row">
         <div class="col-2"></div>
-        <form action="http://localhost:8080/listings" method="POST" class="col-8 needs-validation" novalidate >                      
+        <form action="http://localhost:8080/listings" method="POST" class="col-8 needs-validation" novalidate enctype="multipart/form-data">                      
         <h3>Add new room</h3>
             
             <div class="mb-3">
@@ -19,9 +19,10 @@
                 <div class="valid-feedback">Nice</div>
                 <div class="invalid-feedback">Please enter a short message!</div>
             </div>
+            
             <div class="mb-3">
                 <label for="Image" class="form-label">Image</label>
-                <input type="text" name="listing[image]" class="form-control" id="Image" placeholder="Enter Image Url ">
+                <input type="file" name="listing[image]" class="form-control" id="Image" placeholder="Enter Image Url ">
                 <div class="valid-feedback">Nice</div>
                 <div class="invalid-feedback">Please enter image url!</div>
             </div>

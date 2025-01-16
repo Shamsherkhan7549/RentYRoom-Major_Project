@@ -17,7 +17,7 @@ const joiSchema = Joi.object({
 
 const reviewJoiSchema = Joi.object({
         remarks:Joi.string().required(),
-        rating:Joi.number().required().min(1).max(5)
+        rating:Joi.number().required().min(1).max(5).default(3)
 });
 
 module.exports  = {joiSchema, reviewJoiSchema}

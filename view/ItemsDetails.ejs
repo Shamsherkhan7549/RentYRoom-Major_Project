@@ -4,7 +4,7 @@
         <div class="row">
             <div class=" col-12 col-sm-10 col-md-8 col-lg-6 items-details">
                 <h2 class="card-title"><%= room.title %></h2>
-                <img src="<%= room.image %>" class="card-img-top" alt="...">
+                <img src="<%= room.image.url %>" class="card-img-top" alt="...">
                 <div class="card-body">
                     <p>Owned by_ <i><b><%= room.owner.username %></b></i></p>
                     <p class="card-text "><%= room.description %></p>
@@ -37,7 +37,20 @@
             <h6>All Comments</h6>
             <form action="/listings/<%=room._id %>"  method="POST">
                 <label for="rating">Rating</label> <br>
-                <input  type="range" id="rating" name="review[rating]" min="1" max="5" value="5" required>
+                <fieldset class="starability-slot">
+                    <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="1" checked aria-label="No rating." />
+                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                    <label for="first-rate1" title="Terrible">1 star</label>
+                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                    <label for="first-rate2" title="Not good">2 stars</label>
+                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                    <label for="first-rate3" title="Average">3 stars</label>
+                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                    <label for="first-rate4" title="Very good">4 stars</label>
+                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                    <label for="first-rate5" title="Amazing">5 stars</label>
+                  </fieldset>
+                <!-- rating -->
                 <textarea class="form-control" name="review[remarks]" rows='2' cols="1" id="" required></textarea>
                 <button type="submit" class="btn btn-outline-primary mt-2 mb-4">Submit</button>
             </form>
@@ -48,8 +61,8 @@
                         <li class="review-list">
                            <div>
                             <h6>@<%= review.author.username%></h6>
+                            <p class="starability-result" data-rating="<%= review.rating %>"></p>
                             <p><%= review.remarks %></p>
-                            <p><%= review.rating  %>stars</p>
                            </div>
                         
                             <form class="delete-review" action="/listings/<%=room._id %>/review/<%= review._id %>?_method=DELETE" method="POST">

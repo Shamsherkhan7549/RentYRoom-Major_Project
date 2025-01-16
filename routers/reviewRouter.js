@@ -10,7 +10,7 @@ const {validateReview,isLoggedIn, isAuthor} = require('../middleware/authenticat
 const review = require('../controller/review.js');
 
 // review
-router.post('/:id',isLoggedIn, validateReview,wrapAsync(review.addReview));
+router.post('/:id', validateReview,isLoggedIn,wrapAsync(review.addReview));
 
 // delete review
 router.delete('/:id/review/:reviewId',isLoggedIn,isAuthor,wrapAsync(review.destroyReview));

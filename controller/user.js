@@ -17,7 +17,7 @@ module.exports.addUser = async(req, res)=>{
         res.redirect('/listings');
     });
    }catch(error){
-    req.flash('success', error.message);
+    req.flash('error', error.message);
     res.redirect('/signup')
    }
 };

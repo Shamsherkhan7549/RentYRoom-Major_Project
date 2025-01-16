@@ -25,8 +25,13 @@ module.exports.itemDetail =  async(req,res,next)=>{
 };
 
 module.exports.addRoom = async(req,res,next)=>{
+    const url = req.file.path;
+    const filename = req.file.filename;
+    console.log(url,'..', filename);
+
     const{listing} = req.body;
-    listing.owner = req.user._id
+    listing.owner = req.user._id;
+    listing.image = {url, filename}
     const room =  new Room(listing);
     await room.save();
     req.flash('success', 'New Room Added');
