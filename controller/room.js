@@ -4,11 +4,11 @@ module.exports.index = async(req,res,next)=>{
     res.render('Listings.ejs', {rooms});
 };
 
-module.exports.newRoom = (req,res,next)=>{
+module.exports.newRoom = (req,res)=>{
     res.render('new.ejs');
 };
 
-module.exports.itemDetail =  async(req,res,next)=>{
+module.exports.itemDetail =  async(req,res)=>{
     
     const {id} = req.params;
     const room = await Room.findById(id)
@@ -18,41 +18,52 @@ module.exports.itemDetail =  async(req,res,next)=>{
     .populate('owner');
     if(!room){
         req.flash('error', 'User not found on this id');
-        // return next(new ExpressError(402, "Invalid Id"))
         res.redirect('/listings');
     }
     res.render("itemsDetails.ejs",{room});
 };
 
-module.exports.addRoom = async(req,res,next)=>{
-    const url = req.file.path;
-    const filename = req.file.filename;
-    console.log(url,'..', filename);
+module.exports.addRoom = async(req,res)=>{
 
     const{listing} = req.body;
-    listing.owner = req.user._id;
-    listing.image = {url, filename}
     const room =  new Room(listing);
+    room.owner = req.user._id;
+
+    const url = req.file.path;
+    const filename = req.file.filename;
+    room.image = {url, filename}
+
     await room.save();
     req.flash('success', 'New Room Added');
     res.redirect('/listings');
 };
 
-module.exports.edit = async(req,res,next)=>{
+module.exports.edit = async(req,res)=>{
     const {id} = req.params;
     const room = await Room.findById(id);
     if(!room){
         req.flash('error', 'User not found on this id');
-        // return next(new ExpressError(402, "Invalid Id"))
         res.redirect('/listings');
     }
-    res.render('edit.ejs', {room});
+
+    let originalImageUrl = room.image.url;
+
+    originalImageUrl = originalImageUrl.replace('/upload', '/upload/h_100,w_400');
+
+    res.render('edit.ejs', {room, originalImageUrl});
 };
 
-module.exports.editRoom = async(req,res,next)=>{
+module.exports.editRoom = async(req,res)=>{
     const {id} = req.params;
     const{listing} = req.body;
     const room = await Room.findByIdAndUpdate(id,{...listing});
+    if(typeof req.file !== 'undefined'){
+        const url = req.file.path;
+        const filename = req.file.filename;
+        room.image = {url, filename};
+     await room.save();
+
+    }
     req.flash('success', 'Room updated');
     res.redirect(`/listings/${id}`);
 };

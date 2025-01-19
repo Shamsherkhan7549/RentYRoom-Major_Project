@@ -5,7 +5,7 @@ module.exports.isLoggedIn = (req, res, next) => {
     if(!req.isAuthenticated()){
       req.session.redirectUrl = req.originalUrl;
         req.flash('error','You must be logged in!')
-       return res.redirect('/login')
+        res.redirect('/login')
     }
     next()
  };
@@ -24,10 +24,10 @@ module.exports.isLoggedIn = (req, res, next) => {
     const {id} = req.params;
     const data = await Room.findById(id);
     if(!data.owner.equals(res.locals.currUser._id)){
-        req.flash('error', "You are not the owner")
-        res.redirect('/listings');
-        return
+      req.flash('error', "You are not the owner")
+      res.redirect('/listings');
     }
+
     return next()
   }
 
@@ -40,10 +40,7 @@ module.exports.isLoggedIn = (req, res, next) => {
     };
 
     req.flash('error', 'You are not the owner')
-        res.redirect(`/listings/${id}`);
-        return
-
-    
+    res.redirect(`/listings/${id}`);    
   }
 
   //joi error handling 

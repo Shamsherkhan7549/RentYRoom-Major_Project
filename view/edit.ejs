@@ -8,7 +8,7 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-2"></div>
-        <form action="http://localhost:8080/listings/<%= room._id %>?_method=PUT" method="POST" class="col-8 needs-validation" novalidate>                      
+        <form action="http://localhost:8080/listings/<%= room._id %>?_method=PUT" method="POST" class="col-8 needs-validation" novalidate enctype="multipart/form-data">                      
         <h3>Edit Room details</h3>
 
             <div class="mb-3">
@@ -23,9 +23,14 @@
                 <div class="valid-feedback">Nice</div>
                 <div class="invalid-feedback">Please enter short description!</div>
             </div>
+
             <div class="mb-3">
-                <label for="Image" class="form-label">Image</label>
-                <input type="text" name="listing[image]" class="form-control" id="Image" placeholder="Enter Image Url" value="<%= room.image %>">
+                <label for="image" class="form-label">Original Image</label> <br>
+                <img src="<%= originalImageUrl %>" height="100px" width="150px">
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Upload New Image</label>
+                <input type="file" name="listing[image]" class="form-control" id="image" >
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">Price</label>

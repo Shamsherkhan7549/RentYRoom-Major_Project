@@ -38,7 +38,7 @@
             <form action="/listings/<%=room._id %>"  method="POST">
                 <label for="rating">Rating</label> <br>
                 <fieldset class="starability-slot">
-                    <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="1" checked aria-label="No rating." />
+                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
                     <input type="radio" id="first-rate1" name="review[rating]" value="1" />
                     <label for="first-rate1" title="Terrible">1 star</label>
                     <input type="radio" id="first-rate2" name="review[rating]" value="2" />
@@ -56,9 +56,9 @@
             </form>
     
             <% if(room.reviews && room.reviews.length>0){ %>
-                <ul class="comments  py-3 overflow-y-scroll scroll-smooth">
+                <ul class="comments d-flex justify-content-around flex-direction-col flex-sm-row flex-wrap  overflow-y-scroll scroll-smooth">
                     <% for(review of room.reviews){%>
-                        <li class="review-list">
+                        <li class="review-list mt-2">
                            <div>
                             <h6>@<%= review.author.username%></h6>
                             <p class="starability-result" data-rating="<%= review.rating %>"></p>
@@ -67,7 +67,7 @@
                         
                             <form class="delete-review" action="/listings/<%=room._id %>/review/<%= review._id %>?_method=DELETE" method="POST">
                                  <%if(currUser && currUser._id.equals(review.author._id)){ %>
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger mb-1">Delete</button>
                                   <% } %>
                             </form>
                            

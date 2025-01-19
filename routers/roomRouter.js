@@ -15,13 +15,13 @@ const upload = multer({ storage})
 
 router.route('/')
 .get(wrapAsync(room.index))
-.post(validateRooms,isLoggedIn,upload.single('listing[image]'), wrapAsync(room.addRoom));
+.post(isLoggedIn,upload.single('listing[image]'),validateRooms, wrapAsync(room.addRoom));
 
 router.get('/new', isLoggedIn, wrapAsync(room.newRoom));
 
 router.route('/:id')
 .get( wrapAsync(room.itemDetail))
-.put(isLoggedIn, validateRooms,isOwner, wrapAsync(room.editRoom))
+.put(isLoggedIn,isOwner,upload.single('listing[image]'), validateRooms, wrapAsync(room.editRoom))
 .delete(isLoggedIn,wrapAsync(room.deleteRoom))
 
 router.get('/:id/edit', isLoggedIn, wrapAsync(room.edit))

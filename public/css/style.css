@@ -18,6 +18,9 @@ body{
     color: #222222;
 }
 
+#navbarNav{
+    background-color: white;
+}
 /* Footer */
 
 .footer{
@@ -122,6 +125,8 @@ body{
         width: 400px;
         height: 350px;
     };
+
+    
 
 }
 

@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const joiSchema = Joi.object({
-    title: Joi.string()
+     title: Joi.string()
             .required(),
     description: Joi.string()
             .required(),
