@@ -10,7 +10,7 @@ body{
 }
 
 .navbar{
-    height: 5rem;
+    height: 4rem;
     background-color: white;
 }
 
@@ -20,6 +20,30 @@ body{
 
 #navbarNav{
     background-color: white;
+ 
+}
+
+.search{
+    display: flex;
+   gap:10px;
+   height: 45px;
+   
+}
+
+.search input{
+    border-radius:20px;
+    font-size: .8rem;
+   font-weight: 600;
+    padding-left: 1.4rem;
+}
+
+.search .btn{
+    background-color: red;
+    color:#fff;
+   border-radius:20px;
+   font-size: .8rem;
+   font-weight: 600;
+
 }
 /* Footer */
 
@@ -33,7 +57,7 @@ body{
     align-items: center;
     font-size: .8rem;
     font-weight: 600;
-    background-attachment: #ebebebeb;
+    background-color: #ebebebeb;
 
 }
 
@@ -101,11 +125,21 @@ body{
 
 /* Listings */
 .room-box{
-    height: 200px;
+    height: 270px;
     opacity: 1;
     &:hover{
         opacity: .8;
     }
+}
+
+.room-box h5{
+    font-size: medium;
+    font-weight: 700;
+}
+
+.room-box p{
+    font-size: small;
+    font-weight: 700;
 }
 
 .room-box a{
@@ -114,21 +148,12 @@ body{
 }
 
 .room-box img{
-        height: 100%;
+         height: 200px;
         width: 100%;
         border-radius: 4px;
 }
 
-@media (max-width:575px) {
-        .room-box{
-        margin: 0 auto;
-        width: 400px;
-        height: 350px;
-    };
 
-    
-
-}
 
 /* error.ejs */
 
@@ -198,9 +223,7 @@ body{
 }
 
 .comments::-webkit-scrollbar {
-     /* Hides scrollbar */
      width: 1px;
-     color: red;
  }
 
 /* Customize the width of the scrollbar */
@@ -218,3 +241,13 @@ body{
   background: #d8d7d7d3; /* Darker grey for the handle */
   border-radius: 4px; /* Rounded corners */
 } 
+
+
+
+@media (max-width:575px) {
+    .room-box{
+    margin: 0 auto;
+    width: 300px;
+    height: 270px;
+    };
+}

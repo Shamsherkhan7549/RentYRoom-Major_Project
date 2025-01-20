@@ -68,20 +68,15 @@ async function main() {
    await mongoose.connect('mongodb://127.0.0.1:27017/RentYRoom')
 };
 
+// app.get('/demo', async(req, res)=>{
+//     let fakeuser = new USER({
+//         email:'abc@gmail123.com',
+//         username:'Shamsher76',
+//     });
 
-app.get('/', ((req, res)=>{
-    res.send('HI , I AM ROOT ROUTE OF RentYRoom')
-}));
-
-app.get('/demo', async(req, res)=>{
-    let fakeuser = new USER({
-        email:'abc@gmail123.com',
-        username:'Shamsher76',
-    });
-
-    let registeredUser = await USER.register(fakeuser, 'hello');
-    res.send(registeredUser)
-});
+//     let registeredUser = await USER.register(fakeuser, 'hello');
+//     res.send(registeredUser)
+// });
 
 app.use('/listings', roomRouter);
 app.use('/listings', reviewRouter);

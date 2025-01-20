@@ -1,30 +1,159 @@
 <% layout('/layouts/boilerplate') -%>
+
+<style>
+    .filters{
+        display: flex;
+        font-size: .9rem;
+        gap: 2rem;
+        overflow-y: hidden;
+        position: relative;
+        z-index: 1;
+    }
+
+    .filters::-webkit-scrollbar{
+       width: 1px;
+    }
+
+    .filters .icon{
+        color: black;
+        opacity: 0.7; 
+        cursor: pointer;
+    }
+
+    .filters .icon:hover{
+        opacity: 1;
+    }
+
+    .toggler{
+        width: 350px;;
+        height: 50px;
+        line-height: 20px;
+        z-index: 2;
+    }
+
+    .filter-toggler{
+        position: sticky !important;
+    }
+
+   .tax-info{
+        display: none;
+        margin-left: 5px;
+    }
+
+</style>
 <body>
     <div class="container text-muted">
+        <div class="row">
+            <div class="search col-6 offset-3 mt-3">
+                <input type="text" class="form-control" placeholder="item name" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn" type="button" id="button-addon2">Button</button>
+              </div>
+        
+        <div class=" d-flex align-items-center filter-toggler"> 
+            <div class="filters mt-4">
+                 <div class="text-center icon ">
+                     <i class="fa-solid fa-fire"></i>
+                     <p>Trending</p>
+                 </div>
+                 <div class="text-center icon">
+                     <i class="fa-solid fa-bed"></i>
+                     <p>Bed</p>
+                 </div>
+                 <div class="text-center icon">
+                     <i class="fa-solid fa-umbrella"></i>
+                     <p>Beach</p>
+                 </div>
+              
+                 <div class="text-center icon">
+                     <i class="fa-solid fa-mountain-city"></i>
+                     <p>Iconic</p>
+                 </div>
+                 <div class="text-center icon">
+                     <i class="fa-solid fa-mountain"></i>
+                     <p>Mountain</p>
+                 </div>
+                 <div class="text-center icon">
+                     <i class="fa-brands fa-fort-awesome"></i>
+                     <p>Castles</p>
+                 </div>
+                 <div class="text-center icon">
+                     <i class="fa-solid fa-person-swimming"></i>
+                     <p>Amazing Pools</p>
+                 </div>
+                 <div class="text-center icon">
+                     <i class="fa-solid fa-campground"></i>
+                     <p>Camping</p>
+                 </div>
+                 <div class="text-center icon">
+                     <i class="fa-solid fa-tractor"></i>
+                     <p>Farms</p>
+                 </div>
+                 <div class="text-center icon">
+                     <i class="fa-solid fa-snowflake"></i>
+                     <p>Arctics</p>
+                 </div>
+
+                 <div class="text-center icon">
+                    <i class="fa-solid fa-igloo"></i>
+                     <p>Domes</p>
+                 </div> <div class="text-center icon">
+                    <i class="fa-solid fa-ship"></i>
+                     <p>Boats</p>
+                 </div> <div class="text-center icon">
+                     <i class="fa-solid fa-snowflake"></i>
+                     <p>Arctics</p>
+                 </div> <div class="text-center icon">
+                     <i class="fa-solid fa-snowflake"></i>
+                     <p>Arctics</p>
+                 </div> <div class="text-center icon">
+                     <i class="fa-solid fa-snowflake"></i>
+                     <p>Arctics</p>
+                 </div> <div class="text-center icon">
+                     <i class="fa-solid fa-snowflake"></i>
+                     <p>Arctics</p>
+                 </div>
+            </div>
+
+            <div class="form-check form-switch form-check-reverse toggler">
+             <input class="form-check-input " type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+             <label class="form-check-label" for="flexSwitchCheckChecked">Display total after taxes </label>
+           </div>
+         </div>
+        </div>
+         
 
         <div class="row ">           
-
-           <!-- <div class="row mt-5">
-                <h3 class=" col-6 ">All Rooms</h3>
-                <form action="http://localhost:8080/listings/new" method="GET" class="col-3">
-                    <button type="submit" class="btn btn-primary">Create new Room</button>
-                </form>
-                <div class="col-3"></div>
-           </div> -->
             <% for(let room of rooms){%>
 
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-5  room-box">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3  room-box">
                     <a href="http://localhost:8080/listings/<%= room._id %>">
-                        <img  src="<%= room.image.url %>" alt="" srcset="">
+                        <img  src="<%= room.image.url %>">
 
                         <div class="text-muted">
                             <h5><%= room.title %></h5>
-                            <p>&#8377;<%= room.price.toLocaleString('en-IN') %>/night</p>
+                            <p>
+                                &#8377;<%= room.price.toLocaleString('en-IN')  %>/night
+                                <i class="tax-info">+18%</i>
+                            </p>
                         </div>
                     </a>
                 </div>
             <% } %>
         </div>
     </div>
+<script>
+    const toggler = document.getElementById('flexSwitchCheckChecked');
+    toggler.addEventListener('click', (event)=>{
 
+    let taxInfo = document.getElementsByClassName('tax-info');
+
+    for(info of taxInfo){
+            if(info.style.display === 'none'){
+            info.style.display = 'inline'
+        }else{
+            info.style.display = 'none'
+        }
+    }
+})
+</script>
 </body>
