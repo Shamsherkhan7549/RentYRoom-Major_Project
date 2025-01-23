@@ -95,7 +95,9 @@ main().then(result=>{
 
 
 
-
+app.get('/', (req, res)=>{
+    res.redirect('/listings')
+})
 
 app.use('/listings', roomRouter);
 app.use('/listings', reviewRouter);
