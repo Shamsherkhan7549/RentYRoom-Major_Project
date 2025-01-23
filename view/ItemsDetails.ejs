@@ -58,7 +58,7 @@
             <% if(room.reviews && room.reviews.length>0){ %>
                 <ul class="comments d-flex justify-content-around flex-direction-col flex-sm-row flex-wrap  overflow-y-scroll scroll-smooth">
                     <% for(review of room.reviews){%>
-                        <li class="review-list mt-2">
+                        <li class="review-list my-3">
                            <div>
                             <h6>@<%= review.author.username%></h6>
                             <p class="starability-result" data-rating="<%= review.rating %>"></p>
@@ -67,7 +67,7 @@
                         
                             <form class="delete-review" action="/listings/<%=room._id %>/review/<%= review._id %>?_method=DELETE" method="POST">
                                  <%if(currUser && currUser._id.equals(review.author._id)){ %>
-                                        <button type="submit" class="btn btn-sm btn-outline-danger mb-1">Delete</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                                   <% } %>
                             </form>
                            

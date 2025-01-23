@@ -1,56 +1,15 @@
 <% layout('/layouts/boilerplate') -%>
 
-<style>
-    .filters{
-        display: flex;
-        font-size: .9rem;
-        gap: 2rem;
-        overflow-y: hidden;
-        position: relative;
-        z-index: 1;
-    }
-
-    .filters::-webkit-scrollbar{
-       width: 1px;
-    }
-
-    .filters .icon{
-        color: black;
-        opacity: 0.7; 
-        cursor: pointer;
-    }
-
-    .filters .icon:hover{
-        opacity: 1;
-    }
-
-    .toggler{
-        width: 350px;;
-        height: 50px;
-        line-height: 20px;
-        z-index: 2;
-    }
-
-    .filter-toggler{
-        position: sticky !important;
-    }
-
-   .tax-info{
-        display: none;
-        margin-left: 5px;
-    }
-
-</style>
 <body>
     <div class="container text-muted">
         <div class="row">
-            <div class="search col-6 offset-3 mt-3">
-                <input type="text" class="form-control" placeholder="item name" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <div class="search col-sm-6 offset-sm-3 mt-3">
+                <input type="text" class="form-control" placeholder="item name" aria-describedby="button-addon2">
                 <button class="btn" type="button" id="button-addon2">Button</button>
               </div>
         
-        <div class=" d-flex align-items-center filter-toggler"> 
-            <div class="filters mt-4">
+        <div class=" d-flex flex-wrap flex-sm-nowrap align-items-center filter-toggler"> 
+            <div class="filters d-flex gap-4 mt-4">
                  <div class="text-center icon ">
                      <i class="fa-solid fa-fire"></i>
                      <p>Trending</p>
@@ -78,7 +37,7 @@
                  </div>
                  <div class="text-center icon">
                      <i class="fa-solid fa-person-swimming"></i>
-                     <p>Amazing Pools</p>
+                     <p>Pools</p>
                  </div>
                  <div class="text-center icon">
                      <i class="fa-solid fa-campground"></i>
@@ -96,36 +55,25 @@
                  <div class="text-center icon">
                     <i class="fa-solid fa-igloo"></i>
                      <p>Domes</p>
-                 </div> <div class="text-center icon">
+                 </div>
+                 <div class="text-center icon">
                     <i class="fa-solid fa-ship"></i>
                      <p>Boats</p>
-                 </div> <div class="text-center icon">
-                     <i class="fa-solid fa-snowflake"></i>
-                     <p>Arctics</p>
-                 </div> <div class="text-center icon">
-                     <i class="fa-solid fa-snowflake"></i>
-                     <p>Arctics</p>
-                 </div> <div class="text-center icon">
-                     <i class="fa-solid fa-snowflake"></i>
-                     <p>Arctics</p>
-                 </div> <div class="text-center icon">
-                     <i class="fa-solid fa-snowflake"></i>
-                     <p>Arctics</p>
                  </div>
             </div>
 
-            <div class="form-check form-switch form-check-reverse toggler">
-             <input class="form-check-input " type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
-             <label class="form-check-label" for="flexSwitchCheckChecked">Display total after taxes </label>
+            <div class=" form-switch toggler py-2 rounded">
+             <input class="form-check-input p-2 " type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+             <label class="form-check-label" for="flexSwitchCheckChecked">Display after taxes </label>
            </div>
-         </div>
+        </div>
         </div>
          
 
         <div class="row ">           
             <% for(let room of rooms){%>
 
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3  room-box">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-4 room-box">
                     <a href="http://localhost:8080/listings/<%= room._id %>">
                         <img  src="<%= room.image.url %>">
 

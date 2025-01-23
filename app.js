@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./ExpressError/ExpressError');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const flash = require('connect-flash')
 const reviewRouter = require('./routers/reviewRouter');
 const roomRouter = require('./routers/roomRouter');
@@ -22,8 +23,30 @@ const USER = require('./model/userSchema');
 const app = express();
 const port = 8080;
 
+const dbUrl = process.env.ATLASDB_URL;
+const secret = process.env.SESSION_SECRET;
+async function main() {
+    await mongoose.connect(dbUrl,{
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+ };
+
+// mongo-session
+const store = MongoStore.create({
+    mongoUrl:dbUrl,
+    crypto:{
+        secret:secret
+    },
+    touchAfter:24*3600,
+});
+store.on('error', () => {
+    console.log('Error in mongo-session-store')
+});
+
 const sessionOption = {
-    secret:'mysecretcode',
+    store,
+    secret:secret,
     resave:false,
     saveUninitialized:true,
    cookie:{
@@ -57,6 +80,9 @@ app.use((req, res, next)=>{
 })
 app.engine('ejs', ejsMate);
 
+
+
+
 //server
 main().then(result=>{
     console.log('mongoose is working')
@@ -64,19 +90,12 @@ main().then(result=>{
     console.log("some error found in mongoose", error)
 });
 
-async function main() {
-   await mongoose.connect('mongodb://127.0.0.1:27017/RentYRoom')
-};
+// const mongoUrl = 'mongodb://127.0.0.1:27017/RentYRoom';
 
-// app.get('/demo', async(req, res)=>{
-//     let fakeuser = new USER({
-//         email:'abc@gmail123.com',
-//         username:'Shamsher76',
-//     });
 
-//     let registeredUser = await USER.register(fakeuser, 'hello');
-//     res.send(registeredUser)
-// });
+
+
+
 
 app.use('/listings', roomRouter);
 app.use('/listings', reviewRouter);
