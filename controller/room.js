@@ -20,7 +20,7 @@ module.exports.itemDetail =  async(req,res)=>{
         req.flash('error', 'User not found on this id');
         res.redirect('/listings');
     }
-    res.render("itemsDetails.ejs",{room});
+    res.render("ItemsDetails.ejs",{room});
 };
 
 module.exports.addRoom = async(req,res)=>{
