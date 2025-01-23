@@ -74,6 +74,6 @@ module.exports.deleteRoom =  async(req,res,next)=>{
         return next(new ExpressError(404, `item not found on this ${id}`))
      };
     const room = await Room.findByIdAndDelete(id);
-    req.flash('success', 'One room deleted');
+    req.flash('error', 'One room deleted');
     res.redirect('/listings');
 }

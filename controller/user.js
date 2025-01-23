@@ -1,4 +1,5 @@
 const USER = require('../model/userSchema');
+
 module.exports.signup = (req, res)=>{
     res.render('signUp.ejs')
 };

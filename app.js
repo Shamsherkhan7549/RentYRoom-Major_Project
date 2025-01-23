@@ -26,10 +26,7 @@ const port = 8080;
 const dbUrl = process.env.ATLASDB_URL;
 const secret = process.env.SESSION_SECRET;
 async function main() {
-    await mongoose.connect(dbUrl,{
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
+    await mongoose.connect(dbUrl).then(res=>console.log(res))
  };
 
 // mongo-session
@@ -95,9 +92,7 @@ main().then(result=>{
 
 
 
-app.get('/', (req, res)=>{
-    res.redirect('/listings')
-})
+
 
 app.use('/listings', roomRouter);
 app.use('/listings', reviewRouter);
