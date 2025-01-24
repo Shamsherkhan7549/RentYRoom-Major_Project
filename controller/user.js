@@ -1,7 +1,7 @@
 const USER = require('../model/userSchema');
 
 module.exports.signup = (req, res)=>{
-    res.render('signUp.ejs')
+    res.render('SignUp.ejs')
 };
 
 module.exports.addUser = async(req, res)=>{
