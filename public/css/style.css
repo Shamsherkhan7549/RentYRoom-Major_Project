@@ -58,7 +58,7 @@ body{
     font-size: .8rem;
     font-weight: 600;
     background-color: #ebebebeb;
-    
+
 
 }
 
@@ -282,4 +282,8 @@ body{
 .filter-input{
     background-color: transparent;
     border: none;
+}
+
+.signup,.login{
+    height: 60vh;
 }
