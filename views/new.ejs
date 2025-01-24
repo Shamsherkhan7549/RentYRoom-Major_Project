@@ -26,11 +26,37 @@
                 <div class="valid-feedback">Nice</div>
                 <div class="invalid-feedback">Please enter image url!</div>
             </div>
-            <div class="mb-3">
-                <label for="price" class="form-label">Price</label>
-                <input type="text" name="listing[price]" class="form-control" id="price" placeholder="Enter Price" required>
-                <div class="invalid-feedback">Please enter price!</div>
-            </div>
+
+           <div class="d-flex flex-column flex-sm-row gap-sm-3  ">
+                <div class=" mb-3 w-100">
+                    <label for="category" class="form-label">Category</label>                  
+                    <select class="form-control text-muted" name="listing[category]" id="category" required>
+                        <option value="0"> Select Category</option>
+                        <option value="Bed">Bed</option>
+                        <option value="Beach">Beach</option>
+                        <option value="Iconic">Iconic</option>
+                        <option value="Mountain">Mountain</option>
+                        <option value="Castles"> Castles</option>
+                        <option value="Pools">Pools</option>
+                        <option value="Camping"> Camping </option>
+                        <option value="Farms">Farms</option>
+                        <option value="Arctics">Arctics</option>
+                        <option value="Domes">Domes</option>
+                        <option value="Boats">Boats</option>
+                        <option value="Beach">Trending</option>
+
+                        
+                    </select>
+                    <div class="valid-feedback">Nice</div>
+                    <div class="invalid-feedback">Please enter a short message!</div>
+                </div>
+
+                <div class="mb-3 w-100">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="text" name="listing[price]" class="form-control" id="price" placeholder="Enter Price" required>
+                    <div class="invalid-feedback">Please enter price!</div>
+                </div>
+           </div>
             <div class="mb-3">
                 <label for="location" class="form-label">Locations</label>
                 <input type="text" name="listing[location]" class="form-control" id="location" placeholder="Enter Locations" required>

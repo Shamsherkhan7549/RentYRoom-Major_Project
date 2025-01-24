@@ -39,6 +39,11 @@ const RentYRoomSchema = new Schema({
     owner:{
         type:Schema.Types.ObjectId,
         ref:USER
+    },
+
+    category:{
+        type:String,
+        required:true
     }
 
 

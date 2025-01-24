@@ -12,8 +12,25 @@ module.exports.newRoom = (req,res)=>{
 
 module.exports.search = async(req, res) => {
     const {title} = req.query;
-    let rooms = await Room.find()
-    rooms = rooms.filter(ele=> ele.title.toLowerCase().includes(title.toLowerCase()))
+    if(!title){
+        req.flash('error', 'Enter the place name');
+        return res.redirect('/listings');
+    }
+    let rooms = await Room.find({
+        $or:[
+            {title:{$regex:title, $options:'i'}},
+            {country: {$regex:title, $options:'i'}},
+            {location: {$regex:title, $options:'i'}},
+            {category: {$regex:title, $options:'i'}},
+
+            
+        ]});
+
+    if(rooms.length===0){
+        req.flash('error', 'Room not available on this search');
+        return res.redirect('/listings');
+    }
+    
     res.render('search.ejs',{rooms})
 }
 
@@ -25,6 +42,8 @@ module.exports.itemDetail =  async(req,res)=>{
         populate:{path:'author'}
     })
     .populate('owner');
+  
+console.log(room)
     if(!room){
         req.flash('error', 'User not found on this id');
         res.redirect('/listings');

@@ -12,7 +12,9 @@ const joiSchema = Joi.object({
     location: Joi.string()
             .required(),
     country: Joi.string()
-            .required()
+            .required(),
+    category: Joi.string()
+            .required()       
 }).required();
 
 const reviewJoiSchema = Joi.object({
