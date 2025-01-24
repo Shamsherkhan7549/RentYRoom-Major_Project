@@ -273,4 +273,8 @@ body{
  width: 0;
 }
 
+.icon, #flexSwitchCheckChecked{
+    cursor: pointer;
+}
+
 

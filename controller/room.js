@@ -4,9 +4,18 @@ module.exports.index = async(req,res,next)=>{
     res.render('Listings.ejs', {rooms});
 };
 
+
+
 module.exports.newRoom = (req,res)=>{
     res.render('new.ejs');
 };
+
+module.exports.search = async(req, res) => {
+    const {title} = req.query;
+    let rooms = await Room.find()
+    rooms = rooms.filter(ele=> ele.title.toLowerCase().includes(title.toLowerCase()))
+    res.render('search.ejs',{rooms})
+}
 
 module.exports.itemDetail =  async(req,res)=>{
     
@@ -68,6 +77,8 @@ module.exports.editRoom = async(req,res)=>{
     res.redirect(`/listings/${id}`);
 };
 
+
+
 module.exports.deleteRoom =  async(req,res,next)=>{
     const {id} = req.params;
     if(!id){
@@ -77,3 +88,5 @@ module.exports.deleteRoom =  async(req,res,next)=>{
     req.flash('error', 'One room deleted');
     res.redirect('/listings');
 }
+
+

@@ -18,6 +18,7 @@ router.route('/')
 .post(isLoggedIn,upload.single('listing[image]'),validateRooms, wrapAsync(room.addRoom));
 
 router.get('/new', isLoggedIn, wrapAsync(room.newRoom));
+router.get('/search',wrapAsync(room.search))
 
 router.route('/:id')
 .get( wrapAsync(room.itemDetail))
